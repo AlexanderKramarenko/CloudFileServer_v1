@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+
+
+<VBox fx:controller="ru.alexander_kramarenko.netty_file_transfer.client.MainController"  xmlns:fx="http://javafx.com/fxml" alignment="center">
+
+
+    <HBox VBox.vgrow="ALWAYS">
+        <TextField fx:id="fileNameForDownload" HBox.hgrow="ALWAYS" promptText="Введите имя файла для загрузки" onAction="#pressOnDownloadBtn" />
+    </HBox>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <HBox VBox.vgrow="ALWAYS">
+
+     <ListView fx:id="filesList" prefWidth="150" maxWidth="150" minWidth="150" />
+    </HBox>
+
+</VBox>

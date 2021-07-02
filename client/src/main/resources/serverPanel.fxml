@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="center" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      fx:controller="ru.alexander_kramarenko.netty_file_transfer.client.MainController">
+
+    <HBox>
+        <Label text="Server side" HBox.hgrow="ALWAYS" ></Label>
+
+    </HBox>
+    <!--
+        <HBox>
+
+            <ComboBox fx:id="disksBox" onAction="#selectDiskAction"/>
+
+        <TextField fx:id="pathField" editable="false" HBox.hgrow="ALWAYS"/>
+        <Button text="Up" onAction="#btnPathUpAction"/>
+    </HBox>
+
+
+    <TableView fx:id="filesTable" VBox.vgrow="ALWAYS"/>
+    -->
+    <ListView fx:id="filesList" prefWidth="150" maxWidth="150" minWidth="150" />
+
+    <HBox VBox.vgrow="ALWAYS">
+        <TextField fx:id="fileNameForDownload" HBox.hgrow="ALWAYS" promptText="Введите имя файла для загрузки" onAction="#pressOnDownloadBtn" />
+    </HBox>
+
+
+    <HBox spacing="5">
+        <Button fx:id= "downloadButton" maxWidth="Infinity" focusTraversable="false" text="Download from server" HBox.hgrow="ALWAYS" />
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+    </HBox>
+
+<!--
+    <properties>
+        <ctrl><fx:reference source="mainController"/></ctrl>
+    </properties>
+-->
+</VBox>
