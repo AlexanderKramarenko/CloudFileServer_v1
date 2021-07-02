@@ -13,8 +13,10 @@ public class Network {
     private static ObjectEncoderOutputStream out;
     private static ObjectDecoderInputStream in;
 
-
     public static void start() {
+
+        // Клиент работает на Nio
+        // Запускаем канал клиента и ограничиваем размер входящего сообщения
 
         try {
             socket = new Socket("localhost", 8189);
@@ -24,7 +26,10 @@ public class Network {
             e.printStackTrace();
         }
     }
-    public static void stop(){
+
+    // Последовательно останавливаем службы
+
+    public static void stop() {
 
         try {
             out.close();
@@ -45,7 +50,9 @@ public class Network {
         }
     }
 
-    public static boolean sendMsg(AbstractMessage msg){
+    // Метод для отправки сообщений
+
+    public static boolean sendMsg(AbstractMessage msg) {
         try {
             out.writeObject(msg);
             return true;
@@ -55,12 +62,10 @@ public class Network {
         return false;
     }
 
-    public static AbstractMessage readObject() throws ClassNotFoundException, IOException{
+    // Метод для приема сообщений
+
+    public static AbstractMessage readObject() throws ClassNotFoundException, IOException {
         Object obj = in.readObject();
         return (AbstractMessage) obj;
-
-
     }
-
-
 }

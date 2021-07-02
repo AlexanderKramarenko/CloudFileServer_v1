@@ -14,50 +14,40 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 public class Server {
 
     public void run() throws Exception {
+
+        // Два пула потоков Netty
+        // mainGroup (часто bossGroup) - как правило один поток, ожидающий новых подключений клиентов
+        // workerGroup - пул потоков обработки сетевой логики
         EventLoopGroup mainGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try {
-//            ServerBootstrap b = new ServerBootstrap();
-//            b.group(mainGroup, workerGroup)
-//                    .channel(NioServerSocketChannel.class)
-//                    .childHandler((ChannelInitializer) (ch) -> {
-//                       ch.pipeline().addLast(
-//                                new ObjectDecoder(50 * 1024 * 1024, ClassResolvers.cacheDisabled(null)),
-//                                new ObjectEncoder(),
-//                                new MainHandler()
-//                        );
-//                    });
-
-            ServerBootstrap b = new ServerBootstrap(); // (2)
+            // Запуск ковеера сервера Netty (Bootstrap - запуск Netty на клиенте)
+            ServerBootstrap b = new ServerBootstrap();
             b.group(mainGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class) // (3)
-                    .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(
+                                    // Ограничиваем размер декодируемого файла
                                     new ObjectDecoder(50 * 1024 * 1024, ClassResolvers.cacheDisabled(null)),
                                     new ObjectEncoder(),
+                                    // Подключаем обработчик собственного производства
                                     new MainHandler()
                             );
                         }
                     });
-
-
-//                .childOption(ChannelOption.SO_KEEPALIVE, true);
             ChannelFuture future = b.bind(8189).sync();
             future.channel().closeFuture().sync();
 
-        } finally
-
-        {
+        } finally {
             mainGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         new Server().run();
     }
 }
