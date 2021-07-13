@@ -13,16 +13,16 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 
 public class Server {
 
+    private final int DECODER_LIMIT_X_SIZE = 1024;
+    private final int DECODER_LIMIT_Y_SIZE = 1024;
+    private final int DECODER_LIMIT_Z_SIZE = 50;
+
     public void run() throws Exception {
 
-        // Два пула потоков Netty
-        // mainGroup (часто bossGroup) - как правило один поток, ожидающий новых подключений клиентов
-        // workerGroup - пул потоков обработки сетевой логики
         EventLoopGroup mainGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try {
-            // Запуск ковеера сервера Netty (Bootstrap - запуск Netty на клиенте)
             ServerBootstrap b = new ServerBootstrap();
             b.group(mainGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
@@ -30,10 +30,8 @@ public class Server {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(
-                                    // Ограничиваем размер декодируемого файла
-                                    new ObjectDecoder(50 * 1024 * 1024, ClassResolvers.cacheDisabled(null)),
+                                    new ObjectDecoder(DECODER_LIMIT_X_SIZE * DECODER_LIMIT_Y_SIZE * DECODER_LIMIT_Z_SIZE, ClassResolvers.cacheDisabled(null)),
                                     new ObjectEncoder(),
-                                    // Подключаем обработчик собственного производства
                                     new MainHandler()
                             );
                         }

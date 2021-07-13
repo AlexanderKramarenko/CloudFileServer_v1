@@ -9,25 +9,24 @@ import java.net.Socket;
 
 public class Network {
 
+    private static final int DECODER_LIMIT_X_SIZE = 1024;
+    private static final int DECODER_LIMIT_Y_SIZE = 1024;
+    private static final int DECODER_LIMIT_Z_SIZE = 50;
+
     private static Socket socket;
     private static ObjectEncoderOutputStream out;
     private static ObjectDecoderInputStream in;
 
     public static void start() {
 
-        // Клиент работает на Nio
-        // Запускаем канал клиента и ограничиваем размер входящего сообщения
-
         try {
             socket = new Socket("localhost", 8189);
             out = new ObjectEncoderOutputStream(socket.getOutputStream());
-            in = new ObjectDecoderInputStream(socket.getInputStream(), 50 * 1024 * 1024);
+            in = new ObjectDecoderInputStream(socket.getInputStream(), DECODER_LIMIT_X_SIZE * DECODER_LIMIT_Y_SIZE * DECODER_LIMIT_Z_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    // Последовательно останавливаем службы
 
     public static void stop() {
 
@@ -50,8 +49,6 @@ public class Network {
         }
     }
 
-    // Метод для отправки сообщений
-
     public static boolean sendMsg(AbstractMessage msg) {
         try {
             out.writeObject(msg);
@@ -61,8 +58,6 @@ public class Network {
         }
         return false;
     }
-
-    // Метод для приема сообщений
 
     public static AbstractMessage readObject() throws ClassNotFoundException, IOException {
         Object obj = in.readObject();

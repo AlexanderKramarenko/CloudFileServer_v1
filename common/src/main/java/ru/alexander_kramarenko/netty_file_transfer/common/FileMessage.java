@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-// Общий класс, используемый на клиента и на сервере
-// Формируем сообщение о передаче файла
-
 public class FileMessage extends AbstractMessage {
 
     private String fileName;
