@@ -27,8 +27,6 @@ public class MainController implements Initializable {
 
     private final String CMD_UPDATE_SERVER_FILE_PANEL = "cmdUpdateServerDirectory";
 
-    // На будущее - тестирование работы с поддиректорией клиента
-    private String userName = "Steve";
 
     @FXML
     ListView<String> clientFilesList;
@@ -57,20 +55,13 @@ public class MainController implements Initializable {
             try {
                 while (true) {
 
-                    // Ждем входящих сообщений
-
                     AbstractMessage am = Network.readObject();
-
-                    // Если приходит объект типа FileMessage - принимаем и создаем файл
 
                     if (am instanceof FileMessage) {
                         FileMessage fm = (FileMessage) am;
                         Files.write(Paths.get("client_storage/" + fm.getFileName()), fm.getData(), StandardOpenOption.CREATE);
                         refreshLocalFilesList();
                     }
-
-                    // Если приходит объект типа "ServerFileDirectoryRequest"
-                    // Обновляем панель списка файлов сервера
 
                     if (am instanceof ServerFileDirectoryRequest) {
                         ServerFileDirectoryRequest lst = (ServerFileDirectoryRequest) am;
@@ -86,21 +77,12 @@ public class MainController implements Initializable {
             }
         });
 
-        // Поток-демон - автоматически завершается при завершении приложения
-
         t.setDaemon(true);
         t.start();
-
-        // Сразу после запуска потока клиента
-        // Обновляем панели файлов клиента и сервера
 
         refreshLocalFilesList();
         requestRefreshServerPanelFileList();
     }
-
-    // При нажатии кнопки "Download from server"
-    // отсылаем запрос на файл с именем в строка с id= fileNameForDownload
-    // После отсылки запроса - очищаем строку
 
     public void pressOnDownloadBtn(ActionEvent actionEvent) {
 
@@ -109,11 +91,6 @@ public class MainController implements Initializable {
             fileNameForDownload.clear();
         }
     }
-
-    // При нажатии на кнопку "Upload to server"
-    // 1 - формируем запрос на файл,
-    // т.к. из него можно получить имя файла .getFileName() в сообщении с файлом
-    // Формируем и отсылаем сообщение с файлом
 
     public void pressOnUploadBtn(ActionEvent actionEvent) {
 
@@ -130,8 +107,6 @@ public class MainController implements Initializable {
         }
     }
 
-    // Обновляем панель локальных файлов клиента
-
     public void refreshLocalFilesList() {
         Platform.runLater(() -> {
             try {
@@ -147,18 +122,13 @@ public class MainController implements Initializable {
 
     }
 
-    // Обновляем панель  файлов на сервере в клиенте
-
     public void refreshServerFilesList(ServerFileDirectoryRequest lst) {
         Platform.runLater(() -> {
-         // Обновление серверной панели из полученного листа
+            // Обновление серверной панели из полученного листа
             serverFilesList.getItems().clear();
             serverFilesList.getItems().addAll(lst.getserverDirectory());
         });
     }
-
-    // По 2 кликам выбираем файл из списка локальных
-    // и записываем в строку для отправки по по кнопке
 
     public void selectFileNameFromClientList() {
         clientFilesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -171,9 +141,6 @@ public class MainController implements Initializable {
         });
     }
 
-    // По 2 кликам выбираем файл из списка серверных
-    // и записываем в строку для отправки по по кнопке
-
     public void selectFileNameFromServerList() {
         serverFilesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -184,8 +151,6 @@ public class MainController implements Initializable {
             }
         });
     }
-
-    // Метод для запроса на обновление панели файлов на сервере в клиенте
 
     public void requestRefreshServerPanelFileList() {
         FileRequest fr = new FileRequest(CMD_UPDATE_SERVER_FILE_PANEL);
