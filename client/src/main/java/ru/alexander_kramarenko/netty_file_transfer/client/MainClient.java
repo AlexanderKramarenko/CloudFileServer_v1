@@ -12,7 +12,7 @@ public class MainClient extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
         primaryStage.setTitle("File Server terminal");
-        primaryStage.setScene(new Scene(root, 1280, 600));
+        primaryStage.setScene(new Scene(root, 550, 600));
         primaryStage.show();
 
     }
